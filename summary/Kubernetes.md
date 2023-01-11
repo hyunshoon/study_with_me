@@ -37,12 +37,26 @@ CPU 사용량에 따라 자동으로 애플리케이션의 스케일을 업 또�
 
 로컬 저장소, 클라우드 프로바이더 등과 같이 원하는 저장소 시스템을 자동으로 탑재 할 수 있다.
 
+# 동작 원리
+
+![image](https://user-images.githubusercontent.com/28949162/211851524-33e2abcc-65ee-45b4-b94b-06e2b7232f5b.png)
 
 
+쿠버네티스 워크플로우이다. (1, 2 번은 이해를 돕기 위함이지 엄밀히 말하면 쿠버네티스 워크플로우는 아니다.)
 
-# 구성 요소(쿠버네티스 )
+1. Docker Image build: 유저의 목적은 컨테이너를 쿠버네티스 플랫폼에 올려 사용하는 것이다. 그렇기에 우선 도커를 이용하여 컨테이너를 빌드한뒤 저장소에 푸시한다.
+2. Image Push to Registry: 빌드한 이미지를 도커 허브나 다른 저장소에 push 한다.
+3. kubectl create: 유저가 kubectl을 입력
+4. kubectl issues REST call: kubectl 명령이 컨트롤 플레인의 API Server에 전달된다.
+5. Pod created and scheduled to a worker node: API Server가 스케줄러에 파드 스케줄링을 요청한다. 스케줄러는 노드들의 상태를 보고 적적한 노드를 찾는다.
+6. kubelet is notified: 스케줄러가 스케줄링을 선택한 노드의 kubelet에 파드 생성을 요청
+7. kubelet instructs Docker to run the image: Pod 생성 요청을 받은 kubelet이 Docker 데몬에게 실제 컨테이너의 생성을 요청. (이 부분은 확실하지 않다. 쿠버네티스 릴리스 버전 1.24부터 Dockershim을 사용하지 않는다. 컨테이너 런타임에 대한 설명은 https://kubernetes.io/ko/docs/setup/production-environment/container-runtimes/ 를 참조하자. **kubelet이 컨테이너 런타임에 컨테이너 컨테이너 생성을 요청**한다는건 바뀌지 않는다.)
+8. Docker pulls and runs: 컨테이너 생성 요청을 받은 컨테이너 런타임이 도커 허브나 다른 이미지 저장소에서 이미지를 찾아 이미지를 생성한다. 이렇게 생성된 컨테이너를 쿠버네티스에서는 파드라는 단위로 관리한다.
+
+# 구성 요소(쿠버네티스)
 
 ![image](https://user-images.githubusercontent.com/28949162/211334863-93e1ac07-b79d-4a49-bfe2-9131ac56255d.png)
+
 
 
 ### 컨트롤 플레인 컴포넌트(마스터 노드)
@@ -105,7 +119,6 @@ API 서버를 통해 클러스터의 공유된 상태를 감시하고, 현재 �
 
 쿠버네티스 클러스터는 클러스터 DNS를 갖추어야 한다. 클러스터 DNS는 구성환경 내 다른 DNS 서버와 더불어, 쿠버네티스 서비스를 위해 DNS 레코드를 제공해주는 DNS 서버다. 쿠버네티스에 의해 구동되는 컨테이너는 DNS 검색에서 이 DNS 서버를 자동으로 포함한다.
 
-
 # 쿠버네티스 API
 
 컨트롤플레인의 핵심은 **API 서버**이다. API 서버는 엔드유저, 클러스터, 외부 컴포넌트가 서로 통신할 수 있도록 HTTP API를 제공한다.
@@ -113,7 +126,7 @@ API 서버를 통해 클러스터의 공유된 상태를 감시하고, 현재 �
 kubectl을 사용하거나 REST 호출을 사용하여 API에 직접 접근할 수도 있다.
 쿠버네티스 API를 사용해 애플리케이션을 작성하는 경우는 클라이언트 라이브러리를 사용하는 것이 좋다.
 
-
 Reference
 - https://kubernetes.io/ko/docs/concepts/overview/
 - https://kubernetes.io/ko/docs/concepts/overview/components/
+- https://kimjingo.tistory.com/188
