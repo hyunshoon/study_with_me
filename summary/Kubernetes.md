@@ -41,6 +41,7 @@ CPU 사용량에 따라 자동으로 애플리케이션의 스케일을 업 또�
 
 ![image](https://user-images.githubusercontent.com/28949162/211851524-33e2abcc-65ee-45b4-b94b-06e2b7232f5b.png)
 
+[동작원리 출처](https://kimjingo.tistory.com/188)
 
 쿠버네티스 워크플로우이다. (1, 2 번은 이해를 돕기 위함이지 엄밀히 말하면 쿠버네티스 워크플로우는 아니다.)
 
