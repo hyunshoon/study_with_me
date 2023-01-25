@@ -9,9 +9,6 @@
 4. IP주소
 5. HTTP
 
-웹 통신의 큰 흐름
-
-
 ## 네트워크 기초
 
 네트워크: 노드들이 링크로 연결되어 있어서 리소스를 공유하는 집합. (노드: 서버, 라우터, 스위치 등. 링크: 유선 혹은 무선)
@@ -207,7 +204,7 @@ L7스위치는 로드밸런서라고도 하며, 서버의 부하를 분산하는
 
 라우터, L3스위치가 있다.
 
-**라우터:** 라우터는 여러 개의 네트워크를 연결, 분할, 구분해주는 역할을 하며, ** 다른 네트워크에** 존재하는 장치끼리 데이터를 주고 받을 때 경로를 최적화하여 최소 경로로 패킷을 포워딩하는 역할을 하는 장비다.
+**라우터:** 라우터는 여러 개의 네트워크를 연결, 분할, 구분해주는 역할을 하며, **다른 네트워크에** 존재하는 장치끼리 데이터를 주고 받을 때 경로를 최적화하여 최소 경로로 패킷을 포워딩하는 역할을 하는 장비다.
 
 **L3 스위치:** L2 스위치의 기능과 라우팅 기능을 갖춘 장비.
 
@@ -285,6 +282,19 @@ HTTP/1.0 부터 시작해서 HTTP/1.1, HTTP/2, HTTP/3 으로 발전 했다.
 
 request message에는 startLine(Method, Path, HTTP Version), headers, body로 이루어져 있고 response message에는 statusLine(HTTP Version, Status Code, Status Message), headers, body로 이루어져 있다.
 
+
+### HTTP Method
+
+#### GET VS POST
+
+GET은 클라이언트가 서버에게 리소스를 요청할 때 주로 사용. POST는 데이터를 처리할 때 사용. 
+GET은 특정 정보를 요청할 때 URL 뒤에 Key-value 형태로 Query String을 붙여 요청한다. POST는 Body 부분에 포함하여 통신한다.
+GET은 Query String으로 인해 브라우저에 남게되어 캐시가 되지만 POST는 안된다.
+
+#### PUT, PATCH
+
+리소스를 수정할 때 쓰인다. PUT은 모든 리소스, PATCH는 일부 리소스
+
 ### HTTP Connection less, State less
 
 비연결형이라는 특징을 가진다. 이로써 서버 입장에서는 클라이언트의 동시 접속을 최소화하여 많은 요청을 처리할 수 있게 한다. 연결을 끊기 때문에 클라이언트를 상태를 알 수 없는 State less 특성을 가진다. 이전 상태를 알기 위해 session, cookie, jwt 등을 사용한다.
@@ -292,6 +302,28 @@ request message에는 startLine(Method, Path, HTTP Version), headers, body로 �
 #### 🤷‍♂️ HTTP는 TCP 기반인데 비연결형이고 TCP는 연결형?
 
 HTTP 통신은 비연결형이라 데이터 송수신 후 연결을 끊는다. TCP는 연결형이라 의문이 들었다. HTTP 연결만 끊고 TCP 연결이 유지되어 있으면 서버 리소스는 마찬가지로 낭비되는거 아닌가? 
+
+-> HTTP 연결을 끊을 때 TCP 연결도 같이 끊는다. 매번 끊지않고 일정 시간 유지하려면 Keep-alive 를 사용하면 된다.
+
+### HTTP Status Code
+
+클라이언트가 보낸 요청에대한 서버의 응답 코드로, 요청의 상태에 대한 여부를 알 수 있다. 1xx 번 대 부터 5xx 번대로 나뉜다.
+
+200번대는 성공, 400번대는 클라이언트 오류, 500번대는 서버 오류이다.
+
+#### 자주 쓰이는 Status Code
+
+|Status Code|Message|Description|
+|-|-|-|
+|200|OK|요청 성공|
+|201|Created|리소스 생성 성공|
+|400|Bad Request|서버가 요청을 이해할 수 없음(데이터 형식 에러 등)|
+|401|Unauthorized|인증이 필요한 리소스에 인증되지 않은 접근|
+|403|Forbidden|인증된 상태에서 권한이 없는 리소스에 접근|
+|404|Not Found|요청한 루트가 없음. 리소스가 없음|
+|502|Bad Gateway|서버에서 예상하지 못한 에러 발생|
+
+
 
 ### HTTP/1.0
 
@@ -357,13 +389,44 @@ HTTP/2의 장점인 멀티플렉싱을 가지고 있으며 초기 연결 설정 
 
 QUIC는 TCP를 사용하지 않기 때문에 3-way handshake를 거치지 않아도 된다. 첫 연결 설정에 1-RTT만 소요 된다. 또한, 순방향 오류 수정 매커니즘이 적용되어 전송한 패킷이 손실되었다면 수신 측에서 에러를 검출하고 수정하는 방식이며 열악한 네트워크 환경에서도 낮은 패킷 손실률을 자랑한다.
 
-------------
+## www.naver.com 을 주소창에 입력했을 때 발생하는 일
 
+![image](https://user-images.githubusercontent.com/28949162/214557040-40466838-f5b0-435d-9ba8-008a0ed76526.png)
 
+1. 전송할 HTTP request message를 생성한다.
+2. 메시지의 목적지인 URL 에 입력한 도메인주소의 IP를 찾는다. 이 IP를 찾기 위해 DNS 서버에 질의한다. DNS 서버는 계층화 되어있다. 루트 DNS 서버, 통신사 DNS 서버 등 계층화 되어있는 DNS 서버들을 통해 해당 Domain과 매칭되는 목적지 IP를 찾는다.
+3. 목적지 IP로 HTTP request message를 전달한다. 
+4. 캡슐화 과정을 통해 메시지는 패킷이 되고 랜선과 라우터를 거쳐가며 목적지 IP에 패킷이 도달합니다.
+5. 서버에 도착한 패킷이 메시지로 역캡슐화 된다.
+6. HTTP request message를 기반으로 HTTP response message를 생성한다.
+7. 클라이언트가 서버에 메시지를 전송했던 방식 그대로 서버에서 클라이언트로 메시지를 전송한다.
+8. 클라이언트에서 수신된 HTTP response message를 기반으로 브라우저가 렌더링하여 화면에 출력한다.
 
+### 쿠키, 세션
 
+쿠키와 세션은 앞서 언급한 HTTP 프로토콜의 Stateless 특징 때문에 필요하다. 클라이언트에 대한 이전 정보를 가지고 있지 않기때문에 로그인을 했음에도 HTTP 요청마다 다시 로그인을 해야하는 등의 불편함이 있는데 이를 쿠키와 세션으로 해결한다.
 
-www.naver.com 을 주소창에 입력하면 어떻게 될까요?
+#### 쿠키
+
+쿠키의 생성 과정
+
+1. 서버가 클라이언트에 요청을 받았을 때, 서버가 클라이언트에 대한 정보를 쿠키에 담는다.
+2. 서버가 response message의 header에 쿠키를 담아서 클라이언트에게 전송한다.
+3. 클라이언트가 메시지를 수신하면, 브라우저가 쿠키를 쿠키 디렉토리에 저장한다.
+
+쿠키는 key-value 쌍으로 로컬에 저장되는 데이터이다. 유효시간 내에는 브라우저가 종료되도 유효하다. 클라이언트가 request message를 보낼 때, 브라우저가 쿠키를 헤더에 담아서 저장한다.
+
+#### 세션
+
+세션은 쿠키를 기반으로 구현된다. 서버는 클라이언트를 구분하기 위해 Session ID를 부여하고 이를 쿠키에 저장한다. 사용자 정보를 쿠키에 저장하지 않고 서버에 저장한다. 세션은 유효기간이 있고, 브라우저가 종료되면 세션이 끊긴다. 
+
+#### 쿠키와 세션의 차이
+
+쿠키와 세션의 가장 큰 차이는 사용자 데이터를 클라이언트에 저장하는지(쿠키), 서버에 저장하는지(세션)이다.
+
+세션은 서버에 저장하기 때문에 보안상 이점이 있지만, 서버 부하가 커진다는 단점이 있다.
+
+또한 쿠키는 브라우저가 종료되도 유지되지만 세션은 끊기는 차이가 있다.
 
 Reference
 - https://github.com/JaeYeopHan/Interview_Question_for_Beginner/tree/master/Network
@@ -378,4 +441,4 @@ Reference
 - https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=jyj9372&logNo=50170030307
 - https://svn.apache.org/repos/asf/trafficserver/site/branches/2.0.x/docs/sdk/HTTPHeaders.html
 - https://www.ques10.com/p/18497/explain-tcp-segment-header-format-in-detail-1/
-- 
+- https://amunre21.github.io/web/1-site-works/
