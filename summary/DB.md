@@ -1,11 +1,13 @@
-
+# 들어가기전에
 DB: 구조화된 형식으로 저장되고 데이터를 효율적으로 검색하고 조작할 수 있도록 설계된 조직화된 데이터 모음
+
 DBMS: DB를 정의하고 사용하기 위한 시스템
 
 ------
-## 데이터베이스 특징, 성능
 
-### 데이터베이스의 특징
+# 데이터베이스
+
+## 데이터베이스의 특징
 
 1. 데이터의 독립성
 - 물리적 독립성: 데이터베이스와 데이터의 변경한다고 해서 애플리케이션을 변경할 필요는 없다
@@ -18,39 +20,39 @@ DBMS: DB를 정의하고 사용하기 위한 시스템
 - 연관된 정보를 논리적인 구조로 관리함으로써 하나의 데이터만 변경했을 경우 발생할 수 있는 데이터의 불일치성 배제
 5. 데이터 중복 최소화
 
-### 데이터베이스의 성능
+## 데이터베이스의 성능
 
 DB 성능 이슈는 디스크 I/O를 어떻게 줄이느냐에서 시작된다. 순차I/O가 랜덤I/O 보다 빠른데, 랜덤I/O 자체를 줄여주는 것이 데이터베이스 쿼리 튜닝이다.
 
-### Schema
+## Schema
 
 데이터 모델을 바탕으로 database의 구조를 기술 한 것
 
 스키마는 데이터베이스를 설계할 때 정해지며 한 번 정해진 후에는 자주 바뀌지 않는다.
 
-### State
+## State
 
 데이터베이스에 있는 실제 데이터는 꽤 자주 바뀔 수 있다. 
 
 특정 시점에 데이터베이스에 있는 데이터를 db state 혹은 snapshop이라고 한다.
 
 ----
-## Index
+# Index
 
 인덱스는 색인이다. 조회를 빠르게 해준다.
 
-### 사용 목적
+## 사용 목적
 
 인덱스가 없다면, 데이터를 조회할 때 O(N)의 시간이 걸린다. 인덱스가 있다면 O(logN)(B-tree)이 걸린다. 즉, 조건을 만족하는 튜플을 빠르게 조회하기 위해 사용한다.
 정렬과 그룹핑도 빠르게 해준다.
 
-### 인덱스 구현
+## 인덱스 구현
 
-#### B Tree 인덱스 알고리즘
+### B Tree 인덱스 알고리즘
 
 일반적인 방법. 이진 탐색 트리 기반 자료구조.
 
-#### Hash 인덱스 알고리즘
+### Hash 인덱스 알고리즘
 
 해시테이블을 사용하여 구현
 
@@ -59,7 +61,7 @@ DB 성능 이슈는 디스크 I/O를 어떻게 줄이느냐에서 시작된다. 
 - **equality 비교만 가능, range 비교 불가능**
 - multicolumn index의 경우 전체 attributes에 대한 조회만 가능
 
-### 사용 예시
+## 인덱스 사용 예시
 
 WHERE a=7 AND b=95 를 실행할 때 a=7 를 찾는 시간은 O(logN)이다. 하지만 a=7 AND b=95를 찾을 때는 a=7인 인덱스를 full scan 해야한다.
 
@@ -67,7 +69,14 @@ WHERE a=7 AND b=95 를 실행할 때 a=7 를 찾는 시간은 O(logN)이다. 하
 
 사용하는 query에 맞춰 적절하게 index를 생성해야 query가 빠르게 처리될 수 있다.
 
-### Index 단점
+## 인덱스를 효과적으로 사용하는 방법
+
+1. Query Workload: WHERE, JOIN 및 ORDER BY 쿼리 등이 자주 사용되는 열일수록 좋다.
+2. Column Uniqueness: 고유성이 높은 컬럼일수록 유리하다. 중복이 많은 경우 인덱스의 이점이 약해진다.
+3. Query Selectivity: 상대적으로 적은 수의 행을 반환하는 쿼리일수록 인덱스 효과가 좋다.
+
+
+## 인덱스 단점
 
 인덱스를 생성하는 것은 따로 인덱스 테이블을 만드는 것
 
@@ -76,7 +85,7 @@ WHERE a=7 AND b=95 를 실행할 때 a=7 를 찾는 시간은 O(logN)이다. 하
 
 결론: 불필요한 index는 만들면 안된다.
 
-### 기타
+## 기타
 
 Covering Index: 조회하려는 attributes 를 index가 모두 cover할 때. -> 조회 성능이 더 빨라짐
 
@@ -89,26 +98,86 @@ Full scan이 더 좋은 경우
 ----
 # DB 정규화
 
-RDB에서 중복을 최소화하기 위해 데이터를 구조화하는 작업. 
+RDB에서 데이터의 중복과 종속을 최소화 하기위해 별도의 테이블로 구성하여 데이터를 구조화하는 작업. 
 
-데이터 중복, insertion, update, deletion anomaly를 최소화하기 위해 일련의 normal forms(NF)에 따라 relational DB를 구성하는 과정
+데이터 중복, (insertion, update, deletion) anomaly를 최소화하기 위해 일련의 normal forms(NF)에 따라 relational DB를 구성하는 과정. 나쁜 릴레이션을 줄이는 과정이다.
 
-### Normal forms
+## Bad Relation
 
-정규화 되기 위해 준수해야하는 rule
+### Functional dependency
 
-DB 정규화는 순차적으로 진행하며 normal form을 만족하지 못하면 만족하도록 테이블 구조를 조정한다. 앞 단계를 만족해야 다음 단계로 진행할 수 있다.
+한 테이블에 있는 두 개의 attributes 사이의 제약
 
-### DB 정규화 과정
+X 컬럼에 따라 Y 컬럼이 유일하게 결정될 때 X가 Y를 함수적으로 결정한다 == Y가 X에 함수적으로 의존한다 (예시: X == Full name, Y == Last Name)라고 말하고 이를 두 집합간의 제약 관계 FD라 한다.
 
 
+## Anomaly
+
+![](https://velog.velcdn.com/images/hyunshoon/post/dc9f12c7-9df7-4c2b-a1ed-1c0c227dd4fd/image.png)
+
+1. Insertion Anomalies(삽입 이상): 데이터가 없거나 일치하지 않아 DB에 새 레코드를 삽입할 수 없다. 학생이 새 과목을 수강 신청할 때 학과와 지도교수를 알아야 한다.(불필요한 정보)
+2. Deletion Anomalies(삭제 이상): 하나의 자료만 삭제하고 싶지만, 그 자료가 포함된 튜플 전체가 삭제되는 경우. 300번 학생이 C400 과목을 삭제하면 해당 과목에 대한 정보(C400은 전자)가 사라진다.
+3. Update Anomales(갱신 이상): 정확하지 않거나 일부의 튜플만 갱신되어 정보가 모호해지거나 일관성이 없어지는 경우
+
+
+## Normal forms(정규형)
+
+정규화 되기 위해 준수해야하는 rule.
+
+DB 정규화는 순차적으로 진행하며 normal form을 만족하지 못하면 만족하도록 테이블 구조를 조정한다. 앞 단계를 만족해야 다음 단계로 진행할 수 있다. 3NF 까지 도달하면 정규화 됐다고 말함. 이 단계 까지는 FD와 Key 만으로 정의한다.
+
+## Key
+
+- super key: 테이블에서 튜플들을 unique 하게 식별할 수 있는 attribute set
+- (candidate) key: 어느 한 attribute라도 제거하면 unique 하게 튜플을 식별할 수 없는 super key
+- primary key: 테이블에서 튜플을 unique하게 식별하려고 선택된 candidate key
+- prime attribute: 임의의 key에 속하는 attribute
+
+## DB 정규화 과정
+
+
+### 1차 정규형
+
+![](https://velog.velcdn.com/images/hyunshoon/post/4e2f42f2-e8aa-446e-bae7-ab5cd174d9ac/image.png)
+
+애트리뷰트의 도메인이 오직 원자값만을 포함하는 것
+
+### 2차 정규형
+
+![](https://velog.velcdn.com/images/hyunshoon/post/36d9669c-ebe2-4f26-8641-2a160715a48f/image.png)
+
+모든 Non-Prime Attributes 들이 Prime attributes에 완전 함수적 종속. X->Y 일 때, X의 어떠한 애트리뷰트라도 제거하면 더 이상 함수적 종속성이 성립하지 않는 경우. 즉, 키가 아닌 열들이 각각 후보키에 대해 결정되는 릴레이션 형태
+
+Composite Primary Key: 조합하면 Primary key 가 되는 컬럼들
+
+Partial dependency(하나의 composite primary key 에 종속)를 제거한 작업.
+
+
+### 3차 정규형
+
+일반 컬럼에만 종속된 컬럼을 다른 테이블로 빼는 것.
+
+모든 Non-Prime Attributes 들이 기본키에 대해서 이행적으로 종속되지 않는 것.
+
+## 정규화의 장단점
+
+장점 
+
+1. 위에 언급한 이상현상을 해결
+2. 데이터 모델이 더 의미 있어짐
+
+단점
+
+1. 릴레이션 분해로 JOIN 연산이 많아진다.
 
 ----
+
+
 # Transaction
 
-무결성을 유지하며 상태를 변화시키는 기능을 수행하는 하나 이상의 작업 시퀀스. 트랜잭션은 ACID라고 부르는 4가지 규칙을 만족해야한다.
+데이터베시의 무결성을 유지하며 상태를 변화시키는 기능을 수행하는 하나 이상의 작업 시퀀스. 트랜잭션은 ACID라고 부르는 4가지 속성을 만족해야한다.
 
-## 설명 예시
+## 트랜잭션 설명
 
 ```
 예를 들어 한 은행 계좌에서 다른 은행 계좌로 돈을 이체하는 거래를 생각해 보십시오. 또 다른. 거래에는 다음 단계가 포함될 수 있습니다.
@@ -122,6 +191,11 @@ DB 정규화는 순차적으로 진행하며 normal form을 만족하지 못하�
 
 
 ## ACID
+
+1. Atomicity(원자성): 트랜잭션을 분리할 수 없는 단일 작업 단위로 취급하는 것(원자의 특성). 트랜잭션을 모두 실행하거나 모두 취소하거나 해야한다.
+2. Consistency(일관성): 데이터베이스의 무결성 제약조건이 충족되고 데이터가 일관된 상태로 유지되도록 하는 것
+3. Isolation(고립성): 한 트랜잭션의 실행이 다른 트랜잭션의 실행에 영향을 미치지 않는다. 
+4. Durability(지속성): 트랜잭션이 커밋되면 변경 사항이 영구적이다. 시스템 충돌 및 후속 오류에 영향을 받으면 안된다.
 
 ----
 # RDB VS NoSQL
@@ -153,3 +227,5 @@ RDB가 엄격한 Schema를 가짐으로써 얻는 장점
 
 Reference
 - https://github.com/JaeYeopHan/Interview_Question_for_Beginner/tree/master/Database#%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%B2%A0%EC%9D%B4%EC%8A%A4
+- https://www.youtube.com/watch?v=Y1FbowQRcmI&t=469
+- https://rebro.kr/160
