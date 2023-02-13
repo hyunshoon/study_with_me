@@ -7,6 +7,7 @@ for devops engineer
 
 - [Network](https://github.com/hyunshoon/study_with_me/blob/develop/summary/Networks.md)
 - [OS](https://github.com/hyunshoon/study_with_me/blob/develop/summary/OS.md)
+- [DB](https://github.com/hyunshoon/study_with_me/blob/develop/summary/DB.md)
 - [Kubernetes](https://github.com/hyunshoon/study_with_me/blob/develop/summary/Kubernetes.md)
 - [Prometheus](https://github.com/hyunshoon/study_with_me/blob/develop/summary/Prometheus.md)
 - [Docker](https://github.com/hyunshoon/study_with_me/blob/develop/summary/Docker.md)
