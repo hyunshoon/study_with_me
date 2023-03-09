@@ -19,7 +19,7 @@ MAC 주소는 LAN 레벨에서 고유한 식별자로 사용되며, LAN 내에�
 ![image](https://user-images.githubusercontent.com/28949162/224066118-5ded6641-9aae-4176-a50b-b789bbd8cd0d.png)
 
 이미지 출처:https://better-together.tistory.com/128
-
+```
 DNS(Domain Name System)은 도메인 이름과 IP 주소를 매핑해주는 시스템. 계층 구조로 이루어져있다. 
 
 1. 루트 DNS 서버
