@@ -25,6 +25,11 @@ CS 기술 면접을 위한 Q&A 형식으로 정리한 문서
 - [AWS](https://github.com/hyunshoon/study_with_me/blob/develop/Quiz/AWS.md)
 - [Network](https://github.com/hyunshoon/study_with_me/blob/develop/Quiz/Network.md)
 
+## ETC
+
+카테고리 분류가 애매한 지식들
+
+- [스토리지](https://github.com/hyunshoon/study_with_me/blob/develop/ETC/Storage.md)
 
 
 
