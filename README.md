@@ -1,5 +1,5 @@
 # study_with_me
-for devops engineer
+For cloud engineer & developer
 
 ## Sumamry
 
