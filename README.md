@@ -11,7 +11,6 @@ For cloud engineer & developer
 - [Kubernetes](https://github.com/hyunshoon/study_with_me/blob/develop/summary/Kubernetes.md)
 - [Prometheus](https://github.com/hyunshoon/study_with_me/blob/develop/summary/Prometheus.md)
 - [Docker](https://github.com/hyunshoon/study_with_me/blob/develop/summary/Docker.md)
-- [](https://github.com/hyunshoon/study_with_me/blob/develop/summary/)
 
 
 ## Quiz
@@ -21,7 +20,7 @@ CS 기술 면접을 위한 Q&A 형식으로 정리한 문서
 - [k8s & Docker](https://github.com/hyunshoon/study_with_me/blob/develop/Quiz/Kubernetes&Docker.md)
 - [AWS](https://github.com/hyunshoon/study_with_me/blob/develop/Quiz/AWS.md)
 - [Network](https://github.com/hyunshoon/study_with_me/blob/develop/Quiz/Network.md)
-- [OS & Linux](https://github.com/hyunshoon/study_with_me/blob/develop/Quiz/OS & Linux.md)
+- [OS & Linux](https://github.com/hyunshoon/study_with_me/blob/develop/Quiz/OS_&_Linux.md)
 
 ## AWS
 
@@ -32,7 +31,7 @@ CS 기술 면접을 위한 Q&A 형식으로 정리한 문서
 카테고리 분류가 애매한 지식들
 
 - [스토리지](https://github.com/hyunshoon/study_with_me/blob/develop/ETC/Storage.md)
-- [데이터 센터 화재 정리](https://github.com/hyunshoon/study_with_me/blob/develop/ETC/판교 데이터 센터 화재.md)
+- [데이터 센터 화재 정리](https://github.com/hyunshoon/study_with_me/blob/develop/ETC/판교_데이터_센터_화재.md)
 
 
 
